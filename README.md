@@ -123,6 +123,41 @@ $ tznovel premise examples/茅山后裔_样本.json
 
 ---
 
+## 运行环境
+
+**两层，可以分开用：**
+
+| 层 | 是什么 | 需要什么 |
+|---|---|---|
+| **① Python 工具包** `tznovel` | 文风量化 / 人称判定 / 题材验证 / 报告自检 | **只要 Python 3.9+ 和 requests** |
+| **② Agent 协作模型** `agents/` + `docs/data/SOP.md` | 多角色分工跑完整分析流程 | 支持多 Agent 协作的宿主 |
+
+### 关于 ①：几乎零门槛
+
+| 项 | 要求 |
+|---|---|
+| Python | 3.9 / 3.10 / 3.11 / 3.12（CI 三系统 × 四版本验证） |
+| 操作系统 | Windows / macOS / Linux |
+| 依赖 | **仅 `requests`**，无 Pandas / NumPy / 浏览器驱动 |
+| 网络 | **只有 `fetch` 命令需要**，纯分析完全离线 |
+
+**不需要**：GPU ｜ 大模型 API Key ｜ 浏览器/Playwright ｜ 数据库 ｜ 任何账号
+
+> 这是刻意设计——**分析结论必须可复现**。同一输入，谁跑都得同一个数字，
+> 否则"证据"就失去意义。所以所有分析都是**确定性算法**，零网络推理调用。
+
+### 关于 ②：Agent 层是可选的
+
+`agents/` 下有 6 个角色卡（书目定位 / 章节速读 / 评论取证 / 独立评论 / 防剧透审校 / 寻书猎手），
+它们通过**落盘文件交接**，不靠对话上下文传递。
+
+**宿主不支持多 Agent 也完全能跑** —— 按顺序自己充当每个角色即可。
+多 Agent 的价值只是并行提速，以及让"自评"与"读外部评论"发生在不同上下文里（避免污染）。
+
+👉 **[完整环境说明与常见问题 →](docs/ENVIRONMENT.md)**
+
+---
+
 ## 实际运行长什么样
 
 以下输出全部由真实代码跑出（样本：`examples/茅山后裔_样本.json`，2 章 4533 字）。
@@ -351,24 +386,46 @@ $ tznovel check draft.md --strict
 
 ```
 tz-novel-analysis/
-├── tznovel/
+├── tznovel/                  # ① Python 工具包（独立可用）
 │   ├── analyze/
-│   │   ├── stats.py      # 文风量化（A/B 两组分开报）
-│   │   ├── person.py     # 人称判定（剔对话后统计）
-│   │   └── premise.py    # 题材前提验证
+│   │   ├── stats.py          #   文风量化（A/B 两组分开报）
+│   │   ├── person.py         #   人称判定（剔对话后统计）
+│   │   └── premise.py        #   题材前提验证
 │   ├── fetch/
-│   │   ├── base.py       # 错误分类 + 编码解码
-│   │   ├── retry.py      # UA 降级 + 重试
-│   │   ├── ua_pool.py    # UA 池（PC + 5 种移动端）
-│   │   ├── extract.py    # 正文提取与清洗
-│   │   └── sources/      # 书源适配器（可扩展）
+│   │   ├── base.py           #   错误分类 + 编码解码
+│   │   ├── retry.py          #   UA 降级 + 重试
+│   │   ├── ua_pool.py        #   UA 池（PC + 5 种移动端）
+│   │   ├── extract.py        #   正文提取与清洗
+│   │   └── sources/          #   书源适配器（扩展点）
 │   ├── report/
-│   │   └── precheck.py   # 报告送审前自检
+│   │   └── precheck.py       #   报告送审前自检（6 项）
 │   └── cli.py
-├── tests/                # 45 个测试
-├── examples/             # 样本数据
-└── docs/                 # 方法论说明
+│
+├── agents/                   # ② Agent 协作模型（可选）
+│   ├── book-scout.md         #   书目定位：消歧、元数据、章节结构
+│   ├── chapter-reader.md     #   章节速读：真实读正文，出摘要卡
+│   ├── review-miner.md       #   评论取证：只采别人的话
+│   ├── model-critic.md       #   独立评论：先自评、后对照
+│   ├── spoiler-guard.md      #   防剧透审校：硬闸门
+│   └── genre-hunter.md       #   寻书猎手：无书名模式海选
+│
+├── docs/
+│   ├── ENVIRONMENT.md        # 运行环境与 Agent 协作模型
+│   ├── METHODOLOGY.md        # 方法论（两条铁律 + 九条实践规则）
+│   ├── CASE-STUDIES.md       # 6 本书分析成果与踩坑记录
+│   └── data/
+│       ├── SOP.md            #   标准流程（含降级链、口径规范）
+│       ├── SCORING.md        #   六维量表与权重
+│       └── TEMPLATES.md      #   三种输出模板
+│
+├── tests/                    # 45 个测试
+├── examples/                 # 样本数据（2 章小样本）
+└── .github/workflows/ci.yml  # 三系统 × 四 Python 版本
 ```
+
+**只想用工具** → 看 `tznovel/`，`pip install` 即可。
+**想理解方法** → 看 `docs/METHODOLOGY.md` 与 `docs/CASE-STUDIES.md`。
+**想复刻整套流程** → 看 `agents/` 与 `docs/data/SOP.md`。
 
 ---
 
