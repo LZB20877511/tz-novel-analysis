@@ -159,7 +159,15 @@ def classify(
         return FetchError.RETRYABLE, f"HTTP {status}（服务端临时错误）"
 
     if n < min_chars:
-        return FetchError.IP_BLOCKED, f"正文过短（{n} 字）→ 疑拦截页/空壳/需登录"
+        # ⚠️ 短页面不等于被拦截。实测踩过：example.com 只有 171 字，
+        # 被误报成 IP_BLOCKED，用户会以为被封了。
+        # 只有出现拦截特征词或明确状态码时才判 IP_BLOCKED，否则判"内容不足"。
+        if hit:
+            return FetchError.IP_BLOCKED, f"正文过短且含拦截特征（{n} 字）"
+        return FetchError.EMPTY_SITE, (
+            f"页面内容过短（{n} 字，阈值 {min_chars}）——"
+            f"可能不是正文页/需要登录/该页确实很简短"
+        )
 
     return None, f"正文 {n} 字"
 

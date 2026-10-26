@@ -95,6 +95,7 @@ def check_version(r: Result):
         m = re.search(r'__version__\s*=\s*"([^"]+)"', init.read_text(encoding="utf-8"))
         vals["__init__"] = m.group(1) if m else None
     if changelog.exists():
+        # 只取【最新】一条（文件首条），不是随便匹配一条
         m = re.search(r"^##\s*\[([\d.]+)\]", changelog.read_text(encoding="utf-8"), re.M)
         vals["CHANGELOG"] = m.group(1) if m else None
 

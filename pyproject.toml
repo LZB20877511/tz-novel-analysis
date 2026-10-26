@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tznovel"
-version = "1.0.0"
-description = "网文阅读分析工具包：读完再说，说必有据。文风量化 / 人称判定 / 题材验证 / 送审自检"
+version = "1.0.1"
+description = "缃戞枃闃呰鍒嗘瀽宸ュ叿鍖咃細璇诲畬鍐嶈锛岃蹇呮湁鎹€傛枃椋庨噺鍖?/ 浜虹О鍒ゅ畾 / 棰樻潗楠岃瘉 / 閫佸鑷"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "TZ" }]
-keywords = ["novel", "webnovel", "chinese", "analysis", "nlp", "literature", "网文", "小说分析"]
+keywords = ["novel", "webnovel", "chinese", "analysis", "nlp", "literature", "缃戞枃", "灏忚鍒嗘瀽"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: End Users/Desktop",

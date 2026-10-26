@@ -242,7 +242,7 @@ $ tznovel premise examples/茅山后裔_样本.json
 
 ---
 
-## 快速开始
+## 安装
 
 **方式一：从源码安装（推荐，当前唯一可用方式）**
 
@@ -306,6 +306,74 @@ print(r.cheap_a_total, r.cheap_b_total)  # 68 55
 p = check_premise(chapters)
 print(p.transition)                     # 都市与修行并存（未退出都市）
 ```
+
+---
+
+## 分析你自己手上的书
+
+**大多数人的实际用法是这个：手上有一本 txt（或几段复制来的文字），想知道它什么水平。**
+
+### 支持两种输入
+
+**① 纯文本文件（最简单）**
+
+把小说存成 `.txt`，直接传进去：
+
+```bash
+tznovel person  我的小说.txt      # 人称判定
+tznovel stats   我的小说.txt      # 文风量化
+tznovel premise 我的小说.txt      # 题材验证
+```
+
+> **整本书塞一个 txt 也行**，但工具会把它当"1 章"处理。
+> 想按章统计（推荐），用方式 ②。
+
+**② JSON 章节数组（按章统计，信息更全）**
+
+```json
+[
+  {"label": 1, "title": "第一章", "body": "正文内容..."},
+  {"label": 2, "title": "第二章", "body": "正文内容..."}
+]
+```
+
+```bash
+tznovel stats 我的小说.json --json-out 结果.json
+```
+
+**字段说明**：`label`（章号，可省）、`title`（章名，可省）、`body`（正文，必填）。
+外层也可以是 `{"chapters": [...]}`。
+
+### 一段最简单的 Python 脚本：txt → 分章 → 分析
+
+```python
+import json
+from pathlib import Path
+from tznovel import analyze_text, detect_person
+
+# 按"第X章"切分（你可以换成自己书的章节标记）
+raw = Path("我的小说.txt").read_text(encoding="utf-8")
+parts = raw.split("第")           # 粗略切分
+chapters = [{"label": i + 1, "body": ("第" + p) if i else p}
+            for i, p in enumerate(parts) if p.strip()]
+
+print("章数:", len(chapters))
+print("人称:", detect_person(chapters).verdict)
+r = analyze_text(chapters)
+print(f"总字数 {r.total_chars}，平均句长 {r.avg_sent}")
+```
+
+### 分析结果怎么读
+
+| 指标 | 含义 | 参考 |
+|---|---|---|
+| 平均句长 | 30 字左右属正常；>45 偏长，读着累 | 实测 6 本：28.5–48.9 |
+| 对话字数占比 | 10% 以下偏叙述，35% 以上偏对白 | 实测 10.1%–37.5% |
+| 「！」/千字 | 越高情绪越外放 | 实测 2.95–10.48 |
+| 廉价转折 A/B | 两组都要看，只报 A 组会误判 | 见 [方法论](docs/METHODOLOGY.md) |
+
+> ⚠️ **工具只报数，不下判断。** 这些指标要结合题材看 ——
+> 军事文句长 48 字是正常的，轻小说 48 字就太沉重了。
 
 ---
 

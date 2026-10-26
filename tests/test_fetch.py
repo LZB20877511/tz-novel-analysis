@@ -42,8 +42,13 @@ class TestClassify:
         assert err == FetchError.RETRYABLE
 
     def test_short_content_is_suspicious(self):
+        """短页面应判 EMPTY_SITE，不是 IP_BLOCKED。
+
+        实测教训：example.com 只有 171 字，曾被误报成"被封"，
+        用户会以为自己的网络出了问题。
+        """
         err, reason = classify(200, "<html>" + "短" * 50 + "</html>")
-        assert err == FetchError.IP_BLOCKED
+        assert err == FetchError.EMPTY_SITE
         assert "过短" in reason
 
     def test_normal_page(self):

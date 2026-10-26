@@ -57,18 +57,43 @@ def _line_of(text: str, idx: int) -> int:
 
 
 def check_intro(text: str) -> CheckItem:
-    """简介字数：≤120 且自标值 = 实际值。"""
-    m = re.search(r"(?s)##\s*2[\.、].{0,14}简介.{0,24}\n+(.+?)\n", text)
+    """简介字数：≤120 且自标值 = 实际值。
+
+    简介段落的界定：从 "## ... 简介" 标题后，到下一个小标题/分隔线之前的所有正文行。
+    （早期版本只取标题后的第一行，导致多行简介被截断、字数严重少算。）
+    """
+    m = re.search(r"(?s)^#{1,4}\s*\d*[\.、]?\s*[^\n]*简介[^\n]*$", text, re.M)
     if not m:
-        return CheckItem("C1", "简介字数", "SKIP", "未找到 §2 简介段")
-    intro = re.sub(r"[*_`>]", "", m.group(1).strip()).strip()
+        return CheckItem("C1", "简介字数", "SKIP", "未找到简介小节")
+
+    # 取标题之后、下一个标题或 --- 之前的整段
+    rest = text[m.end():]
+    end = re.search(r"(?m)^(?:#{1,4}\s|\s*---\s*$)", rest)
+    block_raw = rest[: end.start()] if end else rest
+
+    lines = []
+    declared = None
+    for raw_line in block_raw.split("\n"):
+        s = raw_line.strip()
+        if not s:
+            continue
+        # 从任意行里抽自标字数，然后把它从正文里剔除
+        dm = re.search(r"[（(]\s*(\d+)\s*字[^）)]*[）)]", s)
+        if dm and declared is None:
+            declared = int(dm.group(1))
+        s = re.sub(r"[（(]\s*\d+\s*字[^）)]*[）)]", "", s)
+        s = re.sub(r"[*_`>|]", "", s).strip()
+        if s:
+            lines.append(s)
+
+    intro = "".join(lines)
     n_plain = len(intro)
+    if n_plain == 0:
+        return CheckItem("C1", "简介字数", "SKIP", "简介段为空")
 
-    tail = text[m.end(): m.end() + 160]
-    dm = re.search(r"[（(]\s*(\d+)\s*字[^）)]*[）)]", m.group(1) + tail)
-    declared = int(dm.group(1)) if dm else None
-
-    detail = [f"实际（含标点）{n_plain} 字", f"草稿自标 {declared if declared is not None else '未标'}"]
+    detail = [f"实际（含标点）{n_plain} 字",
+              f"草稿自标 {declared if declared is not None else '未标'}",
+              f"解析到的简介前 40 字：{intro[:40]}"]
 
     if n_plain > 120:
         return CheckItem("C1", "简介字数", "FAIL", f"{n_plain} 字 > 120 上限", detail)
