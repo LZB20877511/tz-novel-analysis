@@ -1,0 +1,30 @@
+# GitHub Pages 配置（Jekyll）
+# 目的：让 docs/ 下的 Markdown 渲染成网页，而不是纯文本
+
+title: TZ Novel Analysis
+description: 网文阅读分析工具包 —— 读完先说，说必有据
+lang: zh-CN
+
+# 使用 GitHub 内置主题（无需额外依赖）
+remote_theme: pages-themes/minimal@v0.2.0
+plugins:
+  - jekyll-remote-theme
+  - jekyll-relative-links
+
+# 让 Markdown 之间的相对链接可点
+relative_links:
+  enabled: true
+  collections: false
+
+# 排除不需要发布的文件
+exclude:
+  - "*.py"
+  - "__pycache__/"
+  - ".pytest_cache/"
+
+# Markdown 设置
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
