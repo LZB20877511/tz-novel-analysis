@@ -7,9 +7,45 @@
 | 层 | 是什么 | 依赖 |
 |---|---|---|
 | **① Python 工具包**（`tznovel`） | 文风量化、人称判定、题材验证、报告自检 | 只需 Python 3.9+，**任何环境都能跑** |
-| **② Agent 协作模型**（`agents/` + `docs/SOP.md`） | 多角色分工完成一次完整的书籍分析 | 需要支持多 Agent 协作的宿主环境 |
+| **② Agent 协作模型**（`agents/` + `docs/data/SOP.md`） | 多角色分工完成一次完整的书籍分析 | 需要支持多 Agent 协作的宿主环境 |
 
 **大多数人只需要第 ① 层。** 第 ② 层是这套方法的"原始形态"，适合想让 AI 完整跑一遍分析流程的人。
+
+---
+
+## 零、先回答一个最常见的问题：我需要装 WorkBuddy 吗？
+
+**分两种情况，取决于你要用哪一层：**
+
+| 你想做什么 | 需要装 WorkBuddy / 同类工具吗？ |
+|---|---|
+| **只想用 `tznovel` 命令做分析**（量化、人称判定、题材验证） | ❌ **不需要。** 只要 Python，`pip install` 完就能用 |
+| **想复刻整套多角色分析流程**（`agents/` 那一层） | ✅ **需要。** 需要支持 Agent Skill 的宿主 |
+
+### 如果你要走第 ② 层，需要这类宿主
+
+| 宿主 | 平台 | 说明 |
+|---|---|---|
+| **WorkBuddy** | Windows | 本项目最初打磨时用的环境 |
+| **Claude Code** | Win/mac/Linux | Anthropic 官方 CLI |
+| **Codex CLI** | Win/mac/Linux | OpenAI 官方 CLI |
+| **Cursor / Trae** | Win/mac | 支持 Agent Skill 的编辑器 |
+| 其他支持 | — | **任何能读 `agents/*.md` 并启动多个独立子 Agent 的工具都可以** |
+
+> **本质上 `agents/*.md` 就是普通的 Markdown 提示词文档。**
+> 没有专用格式，也不依赖某个产品的私有 API —— 你甚至可以直接把它们复制到
+> 任意对话框里用，只是没法"并行起多个 Agent"而已。
+
+### 关键区分（很多人会误读）
+
+```
+❌ 错误理解：这个项目是 WorkBuddy 的插件，必须装 WorkBuddy 才能用
+✅ 正确理解：这是一个 Python 包 + 一套用 Markdown 写的方法论。
+              Python 包独立可用；方法论可以手工执行，也可以用任意 Agent 宿主加速。
+```
+
+**为什么强调这点**：`agents/` 目录容易让人误以为"这是个 Agent 插件"。
+实际上它只是六份角色说明文档，**没有它，用 `tznovel` 命令一样能完成分析，只是慢一些、需要你自己扮演每个角色。**
 
 ---
 
@@ -173,3 +209,24 @@ $env:PYTHONIOENCODING = "utf-8"
 六本书的实测数据都来自那个环境。
 
 **但代码本身没有平台绑定** —— CI 在 Ubuntu / Windows / macOS 上均通过 45 个测试。
+
+---
+
+## 六、如何卸载（干净移除）
+
+本项目**不写系统目录、不注册服务、不修改注册表**，卸载很简单：
+
+```bash
+# 1. 卸载 Python 包
+pip uninstall tznovel -y
+
+# 2. 删除源码目录（如果你 clone 过）
+rm -rf tz-novel-analysis     # Windows: rmdir /s tz-novel-analysis
+
+# 3. 删除你自己生成的产物（可选）
+rm -rf reports/  tz_output/  # 分析结果与抓取缓存
+```
+
+**没有残留**：无配置文件、无后台进程、无数据库、无系统级改动。
+如果你用的是虚拟环境，直接删掉整个 venv 目录即可。
+
