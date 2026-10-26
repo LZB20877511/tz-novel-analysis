@@ -109,7 +109,7 @@ pip install tznovel
 或者从源码：
 
 ```bash
-git clone https://github.com/YOUR_NAME/tz-novel-analysis.git
+git clone https://github.com/LZB20877511/tz-novel-analysis.git
 cd tz-novel-analysis
 pip install -e ".[dev]"
 ```

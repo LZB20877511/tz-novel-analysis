@@ -5,7 +5,7 @@
 ## 开发环境
 
 ```bash
-git clone https://github.com/YOUR_NAME/tz-novel-analysis.git
+git clone https://github.com/LZB20877511/tz-novel-analysis.git
 cd tz-novel-analysis
 pip install -e ".[dev]"
 pytest tests -q          # 应显示 45 passed
