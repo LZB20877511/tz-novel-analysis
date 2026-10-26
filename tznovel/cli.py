@@ -18,6 +18,27 @@ from pathlib import Path
 from tznovel import __version__
 
 
+def _force_utf8_stdio() -> None:
+    """强制 stdout/stderr 用 UTF-8。
+
+    Windows 中文环境下，控制台默认代码页是 GBK(cp936)，
+    直接 print 中文会抛 UnicodeEncodeError: 'charmap' codec can't encode。
+
+    这个函数在 main() 最开头调用，确保任何平台上输出中文都不崩。
+    注意：Python 3.7+ 才有 reconfigure；更早版本静默跳过。
+    """
+    for stream_name in ("stdout", "stderr"):
+        stream = getattr(sys, stream_name, None)
+        if stream is None:
+            continue
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            try:
+                reconfigure(encoding="utf-8", errors="replace")
+            except Exception:
+                pass
+
+
 def _load_chapters(path: str) -> list[dict]:
     """载入章节数据。
 
@@ -31,7 +52,7 @@ def _load_chapters(path: str) -> list[dict]:
         raise SystemExit(2)
 
     if p.suffix.lower() == ".json":
-        data = json.loads(p.read_text(encoding="utf-8-sig"))
+        data = json.loads(p.read_text(encoding="utf-8-sig", errors="replace"))
         if isinstance(data, dict):
             # 可能是 {"chapters": [...]} 或单章对象
             data = data.get("chapters", [data])
@@ -237,6 +258,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    _force_utf8_stdio()
     args = build_parser().parse_args(argv)
     return args.func(args)
 

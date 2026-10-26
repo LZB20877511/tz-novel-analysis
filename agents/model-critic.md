@@ -146,7 +146,7 @@
 
 ### 偏差 5：量化指标**必须分组报，不能选择性报告**
 - **实证**：《弹痕》报告说"11 个廉价转折词几乎全零"，指的是 `忽然/顿时/陡然/渐渐/简直/骤然`；但同一批词表里的 `竟然 54 次 / 不由 26 次 / 忍不住 14 次` 从未被提及。**"几乎全零"是真的，但它是选择性统计。**
-- **行动要求**：跑 `scripts/novel_stats.py`，它会**自动分 A/B 两组**报数。引用时两组都要写，**不许只报对自己论点有利的那一组**。
+- **行动要求**：跑 ``tznovel stats``，它会**自动分 A/B 两组**报数。引用时两组都要写，**不许只报对自己论点有利的那一组**。
 
 ### 偏差 6：你会**把抽样说成趋势**
 - **实证**：《弹痕》reader 明确写"我未读开头，所以不能声称做过首尾对比"，这种自我限制是对的；但报告层面出现过"全书唯一一次"（实际只覆盖 3.52%）。
@@ -158,7 +158,7 @@
 
 ```bash
 # 1) 文风量化（三区间同口径，自动分组报廉价词）
-python scripts/novel_stats.py reports/_body_<书名>_early.json \
+python `tznovel stats` reports/_body_<书名>_early.json \
     reports/_body_<书名>_mid.json reports/_body_<书名>_late.json \
     --book <书名> --json-out reports/_stats_<书名>.json --crossbook reports/_crossbook_metrics.csv
 

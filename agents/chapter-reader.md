@@ -233,10 +233,10 @@ function cleanNovelText(text) {
 
 ## 🧾 清洗与统计：用统一工具，别自己现写
 
-正文清洗完后，**文风量化一律用 `scripts/novel_stats.py`**（五本实战沉淀的统一口径）：
+正文清洗完后，**文风量化一律用 ``tznovel stats``**（五本实战沉淀的统一口径）：
 
 ```bash
-python scripts/novel_stats.py reports/_body_<书名>_<区间>.json \
+python `tznovel stats` reports/_body_<书名>_<区间>.json \
     --book <书名> --json-out reports/_stats_<书名>_<区间>.json \
     --md-out reports/_stats_<书名>_<区间>.md \
     --crossbook reports/_crossbook_metrics.csv

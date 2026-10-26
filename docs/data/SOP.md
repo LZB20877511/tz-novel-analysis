@@ -21,11 +21,11 @@
      ↓
 [5] Lead 汇总草稿
      ↓
-[6] ⚙️ 跑 scripts\precheck.py  ← 程序闸门（新增，省一轮往返）
+[6] ⚙️ 跑 `tznovel check`  ← 程序闸门（新增，省一轮往返）
      ↓
 [7] spoiler-guard 审校  ← 语义闸门
      ↓
-[8] Lead 照改 → 重跑 precheck --mode final → 发布
+[8] Lead 照改 → 重跑 `tznovel check` → 发布
      ↓
 [9] 落盘 + 追加跨书基线
 ```
@@ -110,7 +110,7 @@
 ```
 正文取不到？
 │
-├─ ① 先跑 scripts\source_probe.py（自动分类 + 自动UA降级）
+├─ ① 先跑 `tznovel probe`（自动分类 + 自动UA降级）
 │     它会给出七类判定，不用你手工看字数、猜是不是拦截页
 │
 ├─ ② 若判 EMPTY_SITE（页面含「转码失败」）
@@ -121,7 +121,7 @@
 │       实测同一章节页：PC UA → 403、移动UA → 200。
 │       ★ 这是性价比最高的一招，先于任何重型方案
 │
-├─ ④ 移动UA 也失败 → 跑 scripts\fetch_mobile_ua.py --try-all-ua
+├─ ④ 移动UA 也失败 → 跑 tznovel fetch_mobile_ua --try-all-ua
 │     轮换 5 个移动 UA（iPhone/Android/微信/UC/夸克）
 │
 ├─ ⑤ 仍失败 → 换索引，别硬刚（关键经验）
@@ -169,7 +169,7 @@
 
 **统一跑量化工具**（别再让各人现写统计脚本——五本写过 4 遍重复的）：
 ```bash
-python scripts/novel_stats.py reports\_body_<书名>_<区间>.json \
+python -m tznovel.cli stats reports\_body_<书名>_<区间>.json \
     --book <书名> --json-out reports\_stats_<书名>_<区间>.json \
     --crossbook reports\_crossbook_metrics.csv
 ```
@@ -198,7 +198,7 @@ python scripts/novel_stats.py reports\_body_<书名>_<区间>.json \
 ## 6. ⚙️ 程序闸门（v2.0 新增，送审前必跑）
 
 ```bash
-python scripts\precheck.py reports\_draft_<书名>.md \
+python -m tznovel.cli check reports\_draft_<书名>.md \
     --weights W=6.5,C=7.5,T=6.5,E=7.5,P=6.5,X=7.0 \
     --extra-words "<本书人名/地名词，逗号分隔>" \
     --strict
@@ -220,14 +220,14 @@ python scripts\precheck.py reports\_draft_<书名>.md \
 
 ## 7. 语义闸门（spoiler-guard）
 
-跑完 precheck 再送。它能查的是程序查不了的：
+跑完 `tznovel check` 再送。它能查的是程序查不了的：
 - **语义级剧透**（换了说法说同一件事；包裹词泄露，如"信物+碎钻+价格"能锁定场景）；
 - **同源重复**（换了措辞的同一处剧透）；
 - **口径自相矛盾**（声明"不可相减"却在减）；
 - **过度断言**（3.52% 覆盖说成"全书唯一"）；
 - **证据标签缺失**、**空话**。
 
-**它出 PASS 后我重跑 `precheck.py --mode final`**，确认改动没引入新问题。
+**它出 PASS 后我重跑 `tznovel check`**，确认改动没引入新问题。
 
 ---
 
@@ -278,8 +278,8 @@ reports\
 
 | 工具 | 用途 | 状态 |
 |---|---|---|
-| `scripts\novel_stats.py` | 统一文风量化（分 A/B 组报廉价词、pua+latin 双污染指标、跨书 CSV） | v1.0，已用 4 本 × 3 区间验证 |
-| `scripts\precheck.py` | 送审前自检（C1–C7） | v1.0，已在 4 本成品上回归通过（0 FAIL） |
+| `tznovel stats` | 统一文风量化（分 A/B 组报廉价词、pua+latin 双污染指标、跨书 CSV） | v1.0，已用 4 本 × 3 区间验证 |
+| `tznovel check` | 送审前自检（C1–C6） | v1.0，已在 4 本成品上回归通过（0 FAIL） |
 | `scripts\fetch_shuquge.ps1` | 某转载站抓取 v1（`N.标题` 格式） | 保留 |
 | `scripts\fetch_shuquge_v2.ps1` | v2（中文数字章名 / auto 判定） | 保留，多数书可用 |
 | `reports\fetch_shuquge_v3.ps1` | v3（卷号前向继承 / 契子白名单 / 章名错字宽松匹配） | 保留 |

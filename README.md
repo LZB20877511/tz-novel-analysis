@@ -224,17 +224,25 @@ $ tznovel premise examples/茅山后裔_样本.json
 
 ## 快速开始
 
-```bash
-pip install tznovel
-```
-
-或者从源码：
+**方式一：从源码安装（推荐，当前唯一可用方式）**
 
 ```bash
 git clone https://github.com/LZB20877511/tz-novel-analysis.git
 cd tz-novel-analysis
-pip install -e ".[dev]"
+pip install -e .
 ```
+
+**方式二：直接下载 wheel**
+
+到 [Releases](https://github.com/LZB20877511/tz-novel-analysis/releases) 下载
+`tznovel-1.0.0-py3-none-any.whl`，然后：
+
+```bash
+pip install tznovel-1.0.0-py3-none-any.whl
+```
+
+> ⚠️ **本项目尚未发布到 PyPI**，因此不能 `pip install tznovel`。
+> （PyPI 上同名包与本项目无关，请勿安装。）
 
 ### 跑一下
 
