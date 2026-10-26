@@ -14,6 +14,7 @@ pytest tests -q          # 应显示 45 passed
 ## 提交前检查清单
 
 - [ ] `pytest tests -q` 全绿
+- [ ] `python scripts/selfcheck.py` 无 FAIL
 - [ ] `tznovel --version` 正常
 - [ ] 新增功能有对应测试
 - [ ] 改了权重常量 → 同步更新 README 与 `tznovel/report/precheck.py`

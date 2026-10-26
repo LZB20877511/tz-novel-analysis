@@ -148,19 +148,33 @@ def check_links(r: Result):
 
 
 def check_stale_refs(r: Result):
-    """C4 无已废弃的脚本名引用。"""
+    """C4 无已废弃的脚本名引用。
+
+    注意：只检查「看起来像命令或路径引用」的行，
+    排除「说明性文字」（例如自检工具自己的说明、CHANGELOG 的历史记录）。
+    """
     stale = ["novel_stats.py", "precheck.py", "source_probe.py",
              "premise_check.py", "fetch_mobile_ua.py"]
+    # 说明性上下文的特征词 —— 出现这些就跳过该行
+    EXPLANATORY = ("已废弃", "已重命名", "旧脚本", "不要用", "改为", "→",
+                   "selfcheck", "CHANGELOG", "历史")
     hits = []
     for p in ROOT.rglob("*.md"):
         if ".git" in p.parts:
             continue
-        txt = p.read_text(encoding="utf-8", errors="replace")
-        for s in stale:
-            if f"scripts" in txt and s in txt:
-                hits.append(f"{p.relative_to(ROOT)} → {s}")
+        for lineno, line in enumerate(
+                p.read_text(encoding="utf-8", errors="replace").split("\n"), 1):
+            if not any(s in line for s in stale):
+                continue
+            if any(k in line for k in EXPLANATORY):
+                continue
+            # 只报「像命令/路径」的行：含 python / scripts/ / scripts\\ / 反引号包裹
+            looks_like_ref = ("scripts" in line or "python " in line
+                              or line.strip().startswith("-"))
+            if looks_like_ref:
+                hits.append(f"{p.relative_to(ROOT)}:L{lineno} → {line.strip()[:60]}")
     if hits:
-        r.add("C4", "废弃引用", "WARN", f"{len(hits)} 处提到旧脚本名", hits)
+        r.add("C4", "废弃引用", "WARN", f"{len(hits)} 处仍在引用旧脚本名", hits)
     else:
         r.add("C4", "废弃引用", "PASS", "无")
 
