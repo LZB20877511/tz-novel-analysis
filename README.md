@@ -8,6 +8,11 @@
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-45%20passed-brightgreen)](tests/)
 
+> ⚠️ **维护状态：不承诺定期更新、不承诺响应 Issue。**
+> 这是个人工具的开源化，不是受支持的产品。没有发布时间表，可能长期停在当前版本。
+> 如果需要持续维护，**请 fork 自用**（MIT 明确允许）。
+> 详见 [MAINTENANCE.md](MAINTENANCE.md)。
+
 ---
 
 ## 你是否有过这些经历？
