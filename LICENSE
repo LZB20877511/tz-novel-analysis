@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 TZ
+Copyright (c) 2026 LZB20877511
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,22 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-关于内容版权的补充说明：
-
-本许可证仅覆盖本项目的**源代码与文档**，不覆盖任何被分析的小说文本。
-本项目不包含、也不授权分发任何第三方作品的正文内容。
-使用者抓取并分析文本时，应自行遵守目标站点的服务条款与当地版权法规。
-
----
-
-## 维护与支持声明（非许可证条款，但同等重要）
-
-本项目按「现状」（AS IS）提供，**不承诺定期更新、不承诺响应 Issue、不承诺接受 PR**。
-
-作者可能长期不维护本项目。使用者应预期代码停留在发布时的状态。
-如需持续维护，请 fork 后自行维护——MIT 许可证明确允许。
-
-详见 MAINTENANCE.md。
