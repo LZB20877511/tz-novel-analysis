@@ -6,12 +6,28 @@
 
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-45%20passed-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/tests-54%20passed-brightgreen)](tests/)
+
+[English](README.en.md) ｜ 中文（当前）
 
 > ⚠️ **维护状态：不承诺定期更新、不承诺响应 Issue。**
 > 这是个人工具的开源化，不是受支持的产品。没有发布时间表，可能长期停在当前版本。
 > 如果需要持续维护，**请 fork 自用**（MIT 明确允许）。
 > 详见 [MAINTENANCE.md](MAINTENANCE.md)。
+
+---
+
+> **一句话**：读完再说，说必有据。
+>
+> 一个回答"这本书到底值不值得读"的工具 —— 不是猜你会不会喜欢，
+> 而是**真的读过原文之后，给你一份别人能复核的评价**。
+
+| 它能回答 | 凭什么 |
+|---|---|
+| 这本书是第几人称？ | 数出来：叙述句里「我」占 0.1% → 第三人称 |
+| 文笔什么水平？ | 量出来：平均句长 36 字、对话占 28%、长句 16% |
+| 号称"都市→修仙"是真的吗？ | 查出来：现代段占 1.9% → 实为开局即仙侠 |
+| 值得读吗？ | 六维评分 + 外部共识对照，**分歧不抹平** |
 
 ---
 
@@ -32,6 +48,69 @@
 > **完全免费**：MIT 协议，无付费版本、无功能限制、无广告、无账号体系。
 
 详见 [运行环境](docs/ENVIRONMENT.md)。
+
+---
+
+## 不用装任何东西 —— 让 AI 助手帮你用
+
+**你不写代码、不会命令行，也能用。** 只要有一个能装技能的 AI 助手就行。
+
+### 三步搞定
+
+**第 1 步**：装一个支持 Agent Skill 的 AI 助手（选一个即可）
+
+| 工具 | 平台 | 说明 |
+|---|---|---|
+| **WorkBuddy** | Windows | 国产，中文界面 |
+| **Claude Code** | Win/Mac/Linux | Anthropic 官方 |
+| **Codex CLI** | Win/Mac/Linux | OpenAI 官方 |
+| **Cursor** | Win/Mac | 编辑器形态，有图形界面 |
+
+**第 2 步**：把这句话直接发给它
+
+```
+帮我安装这个技能：https://github.com/LZB20877511/tz-novel-analysis
+装好后告诉我怎么用。
+```
+
+它会自己下载、放好、加载。装完会告诉你怎么用。
+
+**第 3 步**：直接说人话
+
+```
+帮我分析这本书：D:\我的小说\某某.txt
+告诉我：是第几人称、文笔什么水平、值不值得读
+```
+
+不用记命令，不用懂参数 —— **用中文说你要什么就行**。
+
+---
+
+### 然后你能得到什么
+
+它会给你一份结论，比如：
+
+> **人称**：第三人称（叙述句里"我"只占 0.1%）
+> **文笔**：平均句长 36 字，对话占 28%，长句偏多
+> **伏笔**：7 组主要伏笔都回收了
+> **适合谁**：能忍慢热和长段解释的读者
+> **不适合谁**：想要"一口气停不下来"的读者
+
+**关键是每一条都有依据，不是拍脑袋。** 用的是真实读过的原文，而不是"我觉得"。
+
+---
+
+### 如果你愿意动手（3 行命令）
+
+```bash
+git clone https://github.com/LZB20877511/tz-novel-analysis.git
+cd tz-novel-analysis
+pip install -e .
+```
+
+然后 `tznovel --version` 看到版本号就成功了。
+
+> 需要 Python 3.9+。**不需要 GPU、不需要 API Key、不需要联网**（除了抓取网页那一步）。
 
 ---
 
